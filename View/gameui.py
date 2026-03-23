@@ -1,26 +1,6 @@
 import tkinter as tk
 import ttkbootstrap as ttk
-
-
-BG         = "#0d1117"
-PANEL      = "#161b22"
-ACCENT     = "#58a6ff"
-ACCENT2    = "#3fb950"
-MUTED      = "#8b949e"
-FG         = "#e6edf3"
-LISTBG     = "#161b22"
-LISTFG     = "#e6edf3"
-LISTSEL_BG = "#1f6feb"
-LISTSEL_FG = "#ffffff"
-TEXT_BG    = "#0d1117"
-TEXT_FG    = "#e6edf3"
-CURSOR     = "#58a6ff"
-BORDER     = "#30363d"
-
-FONT_MONO  = ("JetBrains Mono", 11)
-FONT_TITLE = ("JetBrains Mono", 10, "bold")
-FONT_LABEL = ("JetBrains Mono", 9)
-# ─────────────────────────────────────────────────────────────────────────────
+from View import constants
 
 
 class View(ttk.Window):
@@ -28,7 +8,7 @@ class View(ttk.Window):
         super().__init__(themename="cyborg")
         self.geometry("800x700")
         self.title("⌨  Speed Test")
-        self.configure(bg=BG)
+        self.configure(bg=constants.BG)
 
 
         self.grid_rowconfigure(0)
@@ -38,15 +18,15 @@ class View(ttk.Window):
         self.listbox = tk.Listbox(
             self,
             height=24,
-            bg=LISTBG,
-            fg=LISTFG,
-            selectbackground=LISTSEL_BG,
-            selectforeground=LISTSEL_FG,
-            font=FONT_MONO,
+            bg=constants.LISTBG,
+            fg=constants.LISTFG,
+            selectbackground=constants.LISTSEL_BG,
+            selectforeground=constants.LISTSEL_FG,
+            font=constants.FONT_MONO,
             borderwidth=0,
             highlightthickness=1,
-            highlightcolor=BORDER,
-            highlightbackground=BORDER,
+            highlightcolor=constants.BORDER,
+            highlightbackground=constants.BORDER,
             activestyle="none",
             relief="flat",
             cursor="hand2",
@@ -57,9 +37,9 @@ class View(ttk.Window):
         self.label = ttk.Label(
             self,
             text="— nothing selected —",
-            font=FONT_LABEL,
-            foreground=MUTED,
-            background=BG,
+            font=constants.FONT_LABEL,
+            foreground=constants.MUTED,
+            background=constants.BG,
         )
         self.label.grid(row=0, column=0, padx=5, pady=5)
 
@@ -67,9 +47,9 @@ class View(ttk.Window):
         self.text_title = ttk.Label(
             self,
             text="▶  Press any key to start typing",
-            font=FONT_TITLE,
-            foreground=ACCENT,
-            background=BG,
+            font=constants.FONT_TITLE,
+            foreground=constants.ACCENT,
+            background=constants.BG,
         )
         self.text_title.grid(row=0, column=1, pady=5, padx=5)
 
@@ -78,15 +58,15 @@ class View(ttk.Window):
             self,
             height=12,
             width=50,
-            bg=PANEL,
-            fg=ACCENT2,
-            font=FONT_MONO,
-            insertbackground=CURSOR,
+            bg=constants.PANEL,
+            fg=constants.ACCENT2,
+            font=constants.FONT_MONO,
+            insertbackground=constants.CURSOR,
             relief="flat",
             borderwidth=0,
             highlightthickness=1,
-            highlightcolor=ACCENT,
-            highlightbackground=BORDER,
+            highlightcolor=constants.ACCENT,
+            highlightbackground=constants.BORDER,
             padx=10,
             pady=8,
             wrap="word",
@@ -99,15 +79,15 @@ class View(ttk.Window):
             self,
             height=11,
             width=50,
-            bg=TEXT_BG,
-            fg=TEXT_FG,
-            font=FONT_MONO,
-            insertbackground=CURSOR,
+            bg=constants.TEXT_BG,
+            fg=constants.TEXT_FG,
+            font=constants.FONT_MONO,
+            insertbackground=constants.CURSOR,
             relief="flat",
             borderwidth=0,
             highlightthickness=1,
-            highlightcolor=ACCENT,
-            highlightbackground=BORDER,
+            highlightcolor=constants.ACCENT,
+            highlightbackground=constants.BORDER,
             padx=10,
             pady=8,
             wrap="word",
@@ -143,3 +123,9 @@ class View(ttk.Window):
 
     def disable_placeholder_window(self):
         self.placeholder.config(state="disabled")
+
+    def clear_placeholder_text(self):
+        self.placeholder.delete("1.0", "end")
+
+    def enable_placeholder_window(self):
+        self.placeholder.config(state="normal")

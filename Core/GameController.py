@@ -1,13 +1,15 @@
 import time
 from Model import Model
-from View import  View
-
+from View.gameui import View
+from View.SignIn import SignIn
 
 class Controller:
 
-    def __init__(self, view, model):
+    def __init__(self, view: View, model: Model, view_login: SignIn):
         self.view = view
         self.model = model
+        self.view_login = view_login
+
         self.start_time = None
         self.words = None
 
@@ -19,22 +21,27 @@ class Controller:
         self.view.bind_listbox(self.handle_selection)
         self.view.bind_start_title(self.handle_label_start)
 
-        self.words = self.model.get_words()
+        self.words = self.model.get_words(45)
         for word in self.words:
             self.view.insert_a_word(word + " ")
 
         self.words.reverse()
         self.view.disable_placeholder_window()
 
-    def change_label_start(self):
-        pass
 
     def handle_selection(self, event):
         selection = event.widget.curselection()
         if selection:
             index = selection[0]
             self.view.set_label_text(f"{event.widget.get(index)} selected!")
-            event.widget.get(index)
+
+            self.view.enable_placeholder_window()
+            self.view.clear_placeholder_text()
+            self.words = self.model.get_words(45 + index)
+            for word in self.words:
+                self.view.insert_a_word(word + " ")
+            self.words.reverse()
+            self.view.disable_placeholder_window()
 
     def handle_label_start(self, event):
         if not self.start_time:
@@ -70,7 +77,9 @@ class Controller:
         return word != ' ' and word != '' and word != '\n'
 
 
-controller = Controller(View(), Model())
-controller.setup()
-controller.run_main_loop()
+
+if __name__ == "__main__":
+    controller = Controller(View(), Model(), SignIn())
+    controller.setup()
+    controller.run_main_loop()
 
