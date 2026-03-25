@@ -1,4 +1,3 @@
-
 BG         = "#0d1117"
 PANEL      = "#161b22"
 ACCENT     = "#58a6ff"
@@ -13,6 +12,7 @@ TEXT_BG    = "#0d1117"
 TEXT_FG    = "#e6edf3"
 CURSOR     = "#58a6ff"
 BORDER     = "#30363d"
+CADMIUM_RED = "#D22B2B"
 
 FONT_MONO  = ("JetBrains Mono", 11)
 FONT_TITLE = ("JetBrains Mono", 10, "bold")

@@ -1,19 +1,19 @@
 import ttkbootstrap as ttk
 import tkinter as tk
-import constants
+from View import constants
 
 
-class SignIn(ttk.Window):
-    def __init__(self):
-        super().__init__(themename="cyborg")
-        self.title("Speed Test — Sign In")
-        self.geometry("800x700")
-        self.resizable(False, False)
-        self.configure(bg=constants.BG)
+class SignIn:
+    def __init__(self, root: ttk.Window):
+        self.root = root
+        self.root.title("Speed Test — Sign In")
+        self.root.geometry("800x700")
+        # self.root.resizable(False, False)
+        self.root.configure(bg=constants.BG)
 
-        frame = tk.Frame(self, bg=constants.PANEL, bd=0, highlightthickness=1,
+        frame = tk.Frame(self.root, bg=constants.PANEL, bd=0, highlightthickness=1,
                          highlightbackground=constants.BORDER)
-        frame.place(relx=0.5, rely=0.5, anchor="center", width=300, height=230)
+        frame.place(relx=0.5, rely=0.5, anchor="center", width=300, height=300)
 
 
         tk.Label(frame, text="USERNAME", font=constants.FONT_LABEL, bg=constants.PANEL,
@@ -64,8 +64,27 @@ class SignIn(ttk.Window):
         )
         self.btn.place(x=20, y=166, width=260, height=36)
 
+        self.register = tk.Button(
+            frame,
+            text="▶  Register",
+            font=constants.FONT_TITLE,
+            bg=constants.ACCENT,
+            fg=constants.BG,
+            activebackground=constants.ACCENT,
+            activeforeground=constants.BG,
+            relief="flat",
+            bd=0,
+            cursor="hand2",
+            command=self.on_sign_in,
+        )
+        self.register.place(x=20, y=210, width=260, height=36)
+
     def bind_login(self, call):
-        self.btn.bind("<Click>", call)
+        self.btn.bind("<Button-1>", call)
+
+    def bind_register(self, call):
+        self.register.bind("<Button-1>", call)
+
 
     def on_sign_in(self):
         user = self.entry_user.get()
@@ -74,5 +93,9 @@ class SignIn(ttk.Window):
         return user, pwd
 
     def destroy_sign_in(self):
-        self.destroy()
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.root.quit()
 
+    def mainloop(self):
+        self.root.mainloop()

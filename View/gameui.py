@@ -2,21 +2,20 @@ import tkinter as tk
 import ttkbootstrap as ttk
 from View import constants
 
+class View:
+    def __init__(self, root: ttk.Window):
+        self.root = root
+        self.root.geometry("800x700")
+        self.root.title("⌨  Speed Test")
+        self.root.configure(bg=constants.BG)
 
-class View(ttk.Window):
-    def __init__(self):
-        super().__init__(themename="cyborg")
-        self.geometry("800x700")
-        self.title("⌨  Speed Test")
-        self.configure(bg=constants.BG)
 
-
-        self.grid_rowconfigure(0)
-        self.grid_columnconfigure(1)
+        self.root.grid_rowconfigure(0)
+        self.root.grid_columnconfigure(1)
 
 
         self.listbox = tk.Listbox(
-            self,
+            self.root,
             height=24,
             bg=constants.LISTBG,
             fg=constants.LISTFG,
@@ -35,7 +34,7 @@ class View(ttk.Window):
 
 
         self.label = ttk.Label(
-            self,
+            self.root,
             text="— nothing selected —",
             font=constants.FONT_LABEL,
             foreground=constants.MUTED,
@@ -45,7 +44,7 @@ class View(ttk.Window):
 
 
         self.text_title = ttk.Label(
-            self,
+            self.root,
             text="▶  Press any key to start typing",
             font=constants.FONT_TITLE,
             foreground=constants.ACCENT,
@@ -55,7 +54,7 @@ class View(ttk.Window):
 
 
         self.placeholder = tk.Text(
-            self,
+            self.root,
             height=12,
             width=50,
             bg=constants.PANEL,
@@ -76,7 +75,7 @@ class View(ttk.Window):
 
 
         self.text = tk.Text(
-            self,
+            self.root,
             height=11,
             width=50,
             bg=constants.TEXT_BG,
@@ -95,6 +94,14 @@ class View(ttk.Window):
         )
         self.text.grid(row=2, column=1, padx=5, pady=5, rowspan=1)
 
+        self.sign_out = ttk.Button(
+            text="Sign out",
+            bootstyle="danger",
+            command= lambda ms=50, call=self.root.destroy: self.root.after(ms, call)
+        )
+        self.sign_out.place(x=12, y=610)
+
+
 
     def set_label_text(self, text):
         self.label.config(text=text)
@@ -106,7 +113,7 @@ class View(ttk.Window):
         self.listbox.bind("<<ListboxSelect>>", call)
 
     def bind_start_title(self, call):
-        self.bind("<Key>", call)
+        self.root.bind("<Key>", call)
 
     def get_text(self):
         return self.text.get("1.0", "end-1c")
@@ -129,3 +136,6 @@ class View(ttk.Window):
 
     def enable_placeholder_window(self):
         self.placeholder.config(state="normal")
+
+    def mainloop(self):
+        self.root.mainloop()

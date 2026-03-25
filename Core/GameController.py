@@ -1,18 +1,16 @@
 import time
-from Model import Model
+from Model.services import ModelService
 from View.gameui import View
-from View.SignIn import SignIn
 
-class Controller:
+class GameController:
 
-    def __init__(self, view: View, model: Model, view_login: SignIn):
-        self.view = view
-        self.model = model
-        self.view_login = view_login
+    def __init__(self, root):
+        self.view = View(root)
+        self.model = ModelService()
+
 
         self.start_time = None
         self.words = None
-
 
     def setup(self):
         items = self.model.get_selection()
@@ -75,11 +73,4 @@ class Controller:
 
     def filter_unwanted_chars(self, word):
         return word != ' ' and word != '' and word != '\n'
-
-
-
-if __name__ == "__main__":
-    controller = Controller(View(), Model(), SignIn())
-    controller.setup()
-    controller.run_main_loop()
 
