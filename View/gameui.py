@@ -101,7 +101,12 @@ class View:
         )
         self.sign_out.place(x=12, y=610)
 
-
+        self.view_achievements = ttk.Button(
+            text="Achievements",
+            bootstyle="primary",
+            command=lambda ms=50, call=self.root.destroy: self.root.after(ms, call)
+        )
+        self.view_achievements.place(x=120, y=610)
 
     def set_label_text(self, text):
         self.label.config(text=text)
@@ -137,5 +142,13 @@ class View:
     def enable_placeholder_window(self):
         self.placeholder.config(state="normal")
 
+    def destroy_game_ui(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.root.quit()
+
     def mainloop(self):
         self.root.mainloop()
+
+    def bind_achievements(self, call):
+        self.view_achievements.bind("<Button-1>", call)

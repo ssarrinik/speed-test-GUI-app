@@ -8,7 +8,6 @@ class SignIn:
         self.root = root
         self.root.title("Speed Test — Sign In")
         self.root.geometry("800x700")
-        # self.root.resizable(False, False)
         self.root.configure(bg=constants.BG)
 
         frame = tk.Frame(self.root, bg=constants.PANEL, bd=0, highlightthickness=1,

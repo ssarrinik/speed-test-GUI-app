@@ -1,7 +1,7 @@
 from Core.SignInController import SignInController
 from Core.GameController import GameController
 import ttkbootstrap as ttk
-import pymysql
+
 
 
 if __name__ == "__main__":
@@ -11,6 +11,6 @@ if __name__ == "__main__":
     controller.run_main_loop()
 
     if controller.current_user:
-        controller = GameController(root)
+        controller = GameController(root, controller.current_user)
         controller.setup()
         controller.view.mainloop()

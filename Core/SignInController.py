@@ -18,7 +18,7 @@ class SignInController:
         username, password = self.view.on_sign_in()
         if self.model.check_authorization(username, password):
             self.view.destroy_sign_in()
-            self.current_user = True
+            self.current_user = username
 
     def run_main_loop(self):
         self.view.mainloop()

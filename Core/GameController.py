@@ -1,14 +1,16 @@
 import time
 from Model.services import ModelService
+from View.board import Board
 from View.gameui import View
+import datetime as dt
 
 class GameController:
 
-    def __init__(self, root):
+    def __init__(self, root, username: str):
+        self.root = root
         self.view = View(root)
         self.model = ModelService()
-
-
+        self.username = username
         self.start_time = None
         self.words = None
 
@@ -18,6 +20,7 @@ class GameController:
 
         self.view.bind_listbox(self.handle_selection)
         self.view.bind_start_title(self.handle_label_start)
+        self.view.bind_achievements(self.handle_achievements)
 
         self.words = self.model.get_words(45)
         for word in self.words:
@@ -59,14 +62,13 @@ class GameController:
             if current_text == self.words:
                 words_per_min = (len(self.words) / (time.time() - self.start_time)) * 60
                 self.view.set_title_text(f"SUCCESS WITH TIME {words_per_min: .2f}")
+                self.model.add_achievement(self.username, dt.datetime.now(), words_per_min)
+
             elif current_text != self.words[0: len(current_text)]:
                 self.view.set_title_text(f"YOU MADE A MISTAKE")
             else:
                 self.view.set_title_text("WE STARTED TO COUNT!")
 
-
-    def calculate_speed(self):
-        pass
 
     def run_main_loop(self):
         self.view.mainloop()
@@ -74,3 +76,15 @@ class GameController:
     def filter_unwanted_chars(self, word):
         return word != ' ' and word != '' and word != '\n'
 
+
+    def handle_achievements(self, event):
+        #katastrofi game view kai orismos tou achievement view
+
+        self.view.destroy_game_ui()
+        achievements = self.model.user_achievements(self.username)
+        print(achievements)
+
+        self.view = Board(self.root, achievements)
+        self.view.mainloop()
+
+        self.view = View(self.root)
