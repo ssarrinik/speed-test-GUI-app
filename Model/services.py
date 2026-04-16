@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import random
 from Model.Models import User, Base
@@ -8,10 +10,10 @@ import bcrypt
 
 class ModelService:
     def __init__(self):
-        self.engine = create_engine("sqlite:///instance/users.db", echo=False)
+        self.engine = create_engine(os.environ.get("DATABASE_URI"), echo=False)
         Base.metadata.create_all(self.engine)
         self.selection = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
-        self.words = pd.read_csv("words.csv")["words"].to_list()
+        self.words = pd.read_csv("../words.csv")["words"].to_list()
 
     def get_selection(self):
         return self.selection
@@ -30,7 +32,7 @@ class ModelService:
             print("There is not a user in the db.")
             return False
 
-        return bcrypt.checkpw(pwd_bytes, user.password)
+        return bcrypt.checkpw(pwd_bytes, user.password.encode("utf-8"))
 
     def select_username(self, username) -> User | None:
 
