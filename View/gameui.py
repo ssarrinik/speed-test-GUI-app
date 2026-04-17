@@ -1,4 +1,6 @@
 import tkinter as tk
+from collections.abc import Callable
+
 import ttkbootstrap as ttk
 from View import constants
 
@@ -96,15 +98,13 @@ class View:
 
         self.sign_out = ttk.Button(
             text="Sign out",
-            bootstyle="danger",
-            command= lambda ms=50, call=self.root.destroy: self.root.after(ms, call)
+            bootstyle="danger"
         )
         self.sign_out.place(x=12, y=610)
 
         self.view_achievements = ttk.Button(
             text="Achievements",
-            bootstyle="primary",
-            command=lambda ms=50, call=self.root.destroy: self.root.after(ms, call)
+            bootstyle="primary"
         )
         self.view_achievements.place(x=120, y=610)
 
@@ -150,5 +150,8 @@ class View:
     def mainloop(self):
         self.root.mainloop()
 
-    def bind_achievements(self, call):
+    def bind_achievements(self, call: Callable) -> None:
         self.view_achievements.bind("<Button-1>", call)
+
+    def bind_sign_out(self, call: Callable) -> None:
+        self.sign_out.bind("<Button-1>", call)

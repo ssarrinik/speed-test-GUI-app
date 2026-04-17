@@ -1,3 +1,4 @@
+from collections.abc import Callable
 import ttkbootstrap as ttk
 import tkinter as tk
 import View.constants as constants
@@ -11,6 +12,18 @@ class Board:
         self.root.title("Speed Test — Achievements")
         self.root.geometry("800x700")
         self.root.configure(bg=constants.BG)
+
+        self.go_back = tk.Button(
+            self.root,
+            text="Go Back",
+            font=constants.FONT_MONO,
+            bg="blue",
+            fg=constants.ACCENT,
+            padx=10,
+            pady=4
+        )
+        self.go_back.grid(column=0, row=0, sticky="e", padx=50, pady=4)
+
 
         for idx, key in enumerate(achievements):
             if idx > 9: break
@@ -30,7 +43,7 @@ class Board:
                 highlightbackground=constants.BORDER,  # subtle border
                 highlightcolor=constants.ACCENT,  # glows on focus
             )
-            card.grid(column=0, row=idx, columnspan=2, sticky="ew", padx=12, pady=4)
+            card.grid(column=1, row=idx, columnspan=2, sticky="ew", padx=12, pady=4)
             card.columnconfigure(0, weight=1)
             card.columnconfigure(1, weight=0)
 
@@ -44,7 +57,7 @@ class Board:
                 anchor="w",
                 padx=8,
             )
-            date_label.grid(column=0, row=0, sticky="w")
+            date_label.grid(column=1, row=0, sticky="w")
 
             # Time label — badge-style, right-aligned
             time_label = tk.Label(
@@ -58,14 +71,16 @@ class Board:
                 relief="flat",
                 borderwidth=0,
             )
-            time_label.grid(column=1, row=0, sticky="e", padx=(8, 0))
+            time_label.grid(column=2, row=0, sticky="e", padx=(8, 0))
 
 
-
-    def free_frame(self):
+    def free_frame(self) -> None:
         for widget in self.root.winfo_children():
             widget.destroy()
         self.root.quit()
 
     def mainloop(self):
         self.root.mainloop()
+
+    def bind_go_back_btn(self, call: Callable) -> None:
+        self.go_back.bind("<Button-1>", call)

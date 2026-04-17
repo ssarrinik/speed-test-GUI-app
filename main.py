@@ -1,5 +1,5 @@
 from Core.SignInController import SignInController
-from Core.GameController import GameController
+from Core.GameController import GameController, BoardController
 import ttkbootstrap as ttk
 
 
@@ -10,7 +10,13 @@ if __name__ == "__main__":
     controller = SignInController(root)
     controller.run_main_loop()
 
-    if controller.current_user:
+    while controller.current_user:
         controller = GameController(root, controller.current_user)
         controller.setup()
-        controller.view.mainloop()
+        controller.run_main_loop()
+
+        if not controller.current_user:
+            break
+
+        controller = BoardController(root, controller.current_user)
+        controller.run_main_loop()

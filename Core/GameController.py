@@ -1,4 +1,6 @@
 import time
+from typing import Literal
+import ttkbootstrap as ttk
 from Model.services import ModelService
 from View.board import Board
 from View.gameui import View
@@ -6,21 +8,25 @@ import datetime as dt
 
 class GameController:
 
-    def __init__(self, root, username: str):
+    def __init__(self, root, username: str) -> None:
         self.root = root
         self.view = View(root)
         self.model = ModelService()
-        self.username = username
+        self.current_user = username
         self.start_time = None
         self.words = None
 
+
     def setup(self):
+        self.view : View
+
         items = self.model.get_selection()
         self.view.add_items_in_list(items)
 
         self.view.bind_listbox(self.handle_selection)
         self.view.bind_start_title(self.handle_label_start)
         self.view.bind_achievements(self.handle_achievements)
+        self.view.bind_sign_out(self.handle_sign_out)
 
         self.words = self.model.get_words(45)
         for word in self.words:
@@ -62,7 +68,7 @@ class GameController:
             if current_text == self.words:
                 words_per_min = (len(self.words) / (time.time() - self.start_time)) * 60
                 self.view.set_title_text(f"SUCCESS WITH TIME {words_per_min: .2f}")
-                self.model.add_achievement(self.username, dt.datetime.now(), words_per_min)
+                self.model.add_achievement(self.current_user, dt.datetime.now(), words_per_min)
 
             elif current_text != self.words[0: len(current_text)]:
                 self.view.set_title_text(f"YOU MADE A MISTAKE")
@@ -73,18 +79,30 @@ class GameController:
     def run_main_loop(self):
         self.view.mainloop()
 
-    def filter_unwanted_chars(self, word):
+    def filter_unwanted_chars(self, word:str):
         return word != ' ' and word != '' and word != '\n'
 
-
-    def handle_achievements(self, event):
-        #katastrofi game view kai orismos tou achievement view
-
+    def handle_achievements(self, event) -> None:
         self.view.destroy_game_ui()
-        achievements = self.model.user_achievements(self.username)
-        print(achievements)
 
+    def handle_sign_out(self, event) -> None:
+        self.current_user = None
+        self.view.destroy_game_ui()
+
+class BoardController:
+
+    def __init__(self, root: ttk.Window, username: str) -> None:
+        self.root = root
+        self.model = ModelService()
+
+        self.current_user = username
+        achievements = self.model.user_achievements(self.current_user)
         self.view = Board(self.root, achievements)
+        self.view.bind_go_back_btn(self.handle_achievements_back_btn)
+
+    def handle_achievements_back_btn(self, event):
+        self.view.free_frame()
+
+    def run_main_loop(self):
         self.view.mainloop()
 
-        self.view = View(self.root)
