@@ -1,6 +1,4 @@
 import os
-from datetime import timezone, datetime
-
 import pandas as pd
 import random
 from Model.Models import User, Base, Achievement
